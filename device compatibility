@@ -1,0 +1,28 @@
+from appium import webdriver
+from time import sleep
+
+desired_caps = {
+    "platformName": "Android",
+    "platformVersion": "10.0",
+    "deviceName": "Android Emulator",
+    "appPackage": "com.example.fitness",
+    "appActivity": "MainActivity",
+    "noReset": "true"
+}
+
+driver = webdriver.Remote('http://localhost:4723/wd/hub', desired_caps)
+
+# Device Compatibility Testing
+def test_device_compatibility():
+    # Check if app is compatible with current device
+    device_model = driver.execute_script('return deviceModel();')
+    app_version = driver.execute_script('return appVersion();')
+    
+    if device_model in app_version:
+        print("Device is compatible with app")
+    else:
+        print("Device is not compatible with app")
+
+test_device_compatibility()
+
+driver.quit()
