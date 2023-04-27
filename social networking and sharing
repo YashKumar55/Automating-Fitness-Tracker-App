@@ -1,0 +1,56 @@
+from appium import webdriver
+from time import sleep
+
+desired_caps = {
+    "platformName": "Android",
+    "deviceName": "Android Emulator",
+    "appPackage": "com.example.fitness",
+    "appActivity": "MainActivity",
+    "noReset": "true"
+}
+
+driver = webdriver.Remote('http://localhost:4723/wd/hub', desired_caps)
+
+# Social Networking Test
+def test_social_networking():
+    # Select the "Friends" button
+    friends_button = driver.find_element_by_id("com.example.fitness:id/friends_button")
+    friends_button.click()
+    
+    # Verify that the user's friend list is displayed
+    friend_list = driver.find_element_by_id("com.example.fitness:id/friend_list")
+    assert friend_list.is_displayed()
+    
+    # Verify that the user can search for friends
+    search_friends_field = driver.find_element_by_id("com.example.fitness:id/search_friends_field")
+    search_friends_field.send_keys("John")
+    sleep(1)
+    search_result = driver.find_element_by_id("com.example.fitness:id/search_result")
+    assert search_result.text == "John Doe"
+    
+    # Verify that the user can view a friend's progress
+    friend_item = driver.find_element_by_xpath("//android.widget.TextView[@text='John Doe']")
+    friend_item.click()
+    friend_progress = driver.find_element_by_id("com.example.fitness:id/friend_progress")
+    assert friend_progress.is_displayed()
+    
+# Sharing Test
+def test_sharing():
+    # Select the "Share" button
+    share_button = driver.find_element_by_id("com.example.fitness:id/share_button")
+    share_button.click()
+    
+    # Verify that the user can share their progress on social media
+    share_facebook_button = driver.find_element_by_id("com.example.fitness:id/share_facebook_button")
+    share_facebook_button.click()
+    sleep(2)
+    # Switch to the Facebook login page and verify that it's displayed
+    contexts = driver.contexts
+    driver.switch_to.context(contexts[1])
+    email_field = driver.find_element_by_id("email")
+    assert email_field.is_displayed()
+    
+test_social_networking()
+test_sharing()
+
+driver.quit()
