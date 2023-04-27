@@ -1,0 +1,58 @@
+from appium import webdriver
+from time import sleep
+
+desired_caps = {
+    "platformName": "Android",
+    "deviceName": "Android Emulator",
+    "appPackage": "com.example.fitness",
+    "appActivity": "MainActivity",
+    "noReset": "true"
+}
+
+driver = webdriver.Remote('http://localhost:4723/wd/hub', desired_caps)
+
+# Progress Tracking Test
+def test_progress_tracking():
+    # Select the "Progress" button
+    progress_button = driver.find_element_by_id("com.example.fitness:id/progress_button")
+    progress_button.click()
+    
+    # Verify that the user's progress is displayed
+    progress_chart = driver.find_element_by_id("com.example.fitness:id/progress_chart")
+    assert progress_chart.is_displayed()
+    
+    # Verify that the user's current weight is displayed
+    current_weight = driver.find_element_by_id("com.example.fitness:id/current_weight")
+    assert current_weight.is_displayed()
+    
+    # Verify that the user's progress towards their fitness goal is displayed
+    fitness_goal = driver.find_element_by_id("com.example.fitness:id/fitness_goal")
+    assert fitness_goal.is_displayed()
+    
+# Goal Setting Test
+def test_goal_setting():
+    # Select the "Goals" button
+    goals_button = driver.find_element_by_id("com.example.fitness:id/goals_button")
+    goals_button.click()
+    
+    # Set a new fitness goal
+    set_goal_button = driver.find_element_by_id("com.example.fitness:id/set_goal_button")
+    set_goal_button.click()
+    
+    weight_loss_goal_button = driver.find_element_by_id("com.example.fitness:id/weight_loss_goal_button")
+    weight_loss_goal_button.click()
+    
+    goal_weight_field = driver.find_element_by_id("com.example.fitness:id/goal_weight_field")
+    goal_weight_field.send_keys("150")
+    
+    save_button = driver.find_element_by_id("com.example.fitness:id/save_button")
+    save_button.click()
+    
+    # Verify that the new fitness goal is displayed
+    current_goal = driver.find_element_by_id("com.example.fitness:id/current_goal")
+    assert current_goal.text == "Lose 10 pounds"
+    
+test_progress_tracking()
+test_goal_setting()
+
+driver.quit()
