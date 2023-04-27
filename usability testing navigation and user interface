@@ -1,0 +1,82 @@
+from appium import webdriver
+from time import sleep
+
+desired_caps = {
+    "platformName": "Android",
+    "deviceName": "Android Emulator",
+    "appPackage": "com.example.fitness",
+    "appActivity": "MainActivity",
+    "noReset": "true"
+}
+
+driver = webdriver.Remote('http://localhost:4723/wd/hub', desired_caps)
+
+# Navigation Test
+def test_navigation():
+    # Verify that the app opens on the Home screen
+    home_title = driver.find_element_by_id("com.example.fitness:id/home_title")
+    assert home_title.is_displayed()
+    
+    # Select the "Workouts" button
+    workouts_button = driver.find_element_by_id("com.example.fitness:id/workouts_button")
+    workouts_button.click()
+    
+    # Verify that the user is taken to the Workouts screen
+    workouts_title = driver.find_element_by_id("com.example.fitness:id/workouts_title")
+    assert workouts_title.is_displayed()
+    
+    # Select the "Exercise Library" button
+    library_button = driver.find_element_by_id("com.example.fitness:id/library_button")
+    library_button.click()
+    
+    # Verify that the user is taken to the Exercise Library screen
+    library_title = driver.find_element_by_id("com.example.fitness:id/library_title")
+    assert library_title.is_displayed()
+    
+    # Select the "Home" button
+    home_button = driver.find_element_by_id("com.example.fitness:id/home_button")
+    home_button.click()
+    
+    # Verify that the user is taken back to the Home screen
+    home_title = driver.find_element_by_id("com.example.fitness:id/home_title")
+    assert home_title.is_displayed()
+
+# User Interface Test
+def test_user_interface():
+    # Verify that the Home screen contains all necessary elements
+    home_title = driver.find_element_by_id("com.example.fitness:id/home_title")
+    assert home_title.is_displayed()
+    
+    log_workout_button = driver.find_element_by_id("com.example.fitness:id/log_workout_button")
+    assert log_workout_button.is_displayed()
+    
+    progress_button = driver.find_element_by_id("com.example.fitness:id/progress_button")
+    assert progress_button.is_displayed()
+    
+    goals_button = driver.find_element_by_id("com.example.fitness:id/goals_button")
+    assert goals_button.is_displayed()
+    
+    # Verify that the Workouts screen contains all necessary elements
+    workouts_button = driver.find_element_by_id("com.example.fitness:id/workouts_button")
+    workouts_button.click()
+    
+    workouts_title = driver.find_element_by_id("com.example.fitness:id/workouts_title")
+    assert workouts_title.is_displayed()
+    
+    workout_list = driver.find_element_by_id("com.example.fitness:id/workout_list")
+    assert workout_list.is_displayed()
+    
+    # Verify that the Exercise Library screen contains all necessary elements
+    library_button = driver.find_element_by_id("com.example.fitness:id/library_button")
+    library_button.click()
+    
+    library_title = driver.find_element_by_id("com.example.fitness:id/library_title")
+    assert library_title.is_displayed()
+    
+    exercise_list = driver.find_element_by_id("com.example.fitness:id/exercise_list")
+    assert exercise_list.is_displayed()
+    
+test_navigation()
+test_user_interface()
+
+driver.quit()
