@@ -1,0 +1,69 @@
+from appium import webdriver
+from time import sleep
+
+desired_caps = {
+    "platformName": "Android",
+    "deviceName": "Android Emulator",
+    "appPackage": "com.example.fitness",
+    "appActivity": "MainActivity",
+    "noReset": "true"
+}
+
+driver = webdriver.Remote('http://localhost:4723/wd/hub', desired_caps)
+
+# User Feedback Test
+def test_user_feedback():
+    # Select the "Contact Us" button
+    contact_button = driver.find_element_by_id("com.example.fitness:id/contact_button")
+    contact_button.click()
+    
+    # Verify that the user is taken to the Contact Us screen
+    contact_title = driver.find_element_by_id("com.example.fitness:id/contact_title")
+    assert contact_title.is_displayed()
+    
+    # Enter feedback into the text field
+    feedback_field = driver.find_element_by_id("com.example.fitness:id/feedback_field")
+    feedback_field.send_keys("I love this app!")
+    
+    # Submit the feedback
+    submit_button = driver.find_element_by_id("com.example.fitness:id/submit_button")
+    submit_button.click()
+    
+    # Verify that the user is taken back to the Home screen
+    home_title = driver.find_element_by_id("com.example.fitness:id/home_title")
+    assert home_title.is_displayed()
+
+# User Input Test
+def test_user_input():
+    # Select the "Log Workout" button
+    log_workout_button = driver.find_element_by_id("com.example.fitness:id/log_workout_button")
+    log_workout_button.click()
+    
+    # Select the "Add Exercise" button
+    add_exercise_button = driver.find_element_by_id("com.example.fitness:id/add_exercise_button")
+    add_exercise_button.click()
+    
+    # Enter the exercise name
+    exercise_name_field = driver.find_element_by_id("com.example.fitness:id/exercise_name_field")
+    exercise_name_field.send_keys("Squats")
+    
+    # Enter the number of sets
+    sets_field = driver.find_element_by_id("com.example.fitness:id/sets_field")
+    sets_field.send_keys("3")
+    
+    # Enter the number of reps
+    reps_field = driver.find_element_by_id("com.example.fitness:id/reps_field")
+    reps_field.send_keys("10")
+    
+    # Submit the exercise
+    submit_button = driver.find_element_by_id("com.example.fitness:id/submit_button")
+    submit_button.click()
+    
+    # Verify that the exercise was added to the workout log
+    workout_list = driver.find_element_by_id("com.example.fitness:id/workout_list")
+    assert "Squats" in workout_list.text
+
+test_user_feedback()
+test_user_input()
+
+driver.quit()
