@@ -1,0 +1,49 @@
+from appium import webdriver
+from time import sleep
+
+desired_caps = {
+    "platformName": "Android",
+    "deviceName": "Android Emulator",
+    "appPackage": "com.example.fitness",
+    "appActivity": "MainActivity",
+    "noReset": "true"
+}
+
+driver = webdriver.Remote('http://localhost:4723/wd/hub', desired_caps)
+
+# Integration with Other Fitness Apps Test
+def test_integration_with_other_fitness_apps():
+    # Select the "Integration" button
+    integration_button = driver.find_element_by_id("com.example.fitness:id/integration_button")
+    integration_button.click()
+    
+    # Verify that the user can view a list of fitness apps
+    fitness_app_list = driver.find_element_by_id("com.example.fitness:id/fitness_app_list")
+    assert fitness_app_list.is_displayed()
+    
+    # Select a fitness app and verify that it is connected
+    fitness_app_item = driver.find_element_by_xpath("//android.widget.TextView[@text='Fitbit']")
+    fitness_app_item.click()
+    fitness_app_connected = driver.find_element_by_id("com.example.fitness:id/fitness_app_connected")
+    assert fitness_app_connected.is_displayed()
+    
+# Integration with Other Fitness Devices Test
+def test_integration_with_other_fitness_devices():
+    # Select the "Integration" button
+    integration_button = driver.find_element_by_id("com.example.fitness:id/integration_button")
+    integration_button.click()
+    
+    # Verify that the user can view a list of fitness devices
+    fitness_device_list = driver.find_element_by_id("com.example.fitness:id/fitness_device_list")
+    assert fitness_device_list.is_displayed()
+    
+    # Select a fitness device and verify that it is connected
+    fitness_device_item = driver.find_element_by_xpath("//android.widget.TextView[@text='Heart Rate Monitor']")
+    fitness_device_item.click()
+    fitness_device_connected = driver.find_element_by_id("com.example.fitness:id/fitness_device_connected")
+    assert fitness_device_connected.is_displayed()
+    
+test_integration_with_other_fitness_apps()
+test_integration_with_other_fitness_devices()
+
+driver.quit()
