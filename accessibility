@@ -1,0 +1,47 @@
+from appium import webdriver
+from time import sleep
+
+desired_caps = {
+    "platformName": "Android",
+    "deviceName": "Android Emulator",
+    "appPackage": "com.example.fitness",
+    "appActivity": "MainActivity",
+    "noReset": "true"
+}
+
+driver = webdriver.Remote('http://localhost:4723/wd/hub', desired_caps)
+
+# Accessibility Test
+def test_accessibility():
+    # Select the "Settings" button
+    settings_button = driver.find_element_by_id("com.example.fitness:id/settings_button")
+    settings_button.click()
+    
+    # Verify that the Accessibility option is present
+    accessibility_option = driver.find_element_by_xpath("//android.widget.TextView[@text='Accessibility']")
+    assert accessibility_option.is_displayed()
+    
+    # Select the Accessibility option
+    accessibility_option.click()
+    
+    # Verify that the font size can be increased
+    increase_font_button = driver.find_element_by_id("com.example.fitness:id/increase_font_button")
+    assert increase_font_button.is_displayed()
+    
+    # Select the Increase Font button
+    increase_font_button.click()
+    
+    # Verify that the font size has increased
+    workout_title = driver.find_element_by_id("com.example.fitness:id/workout_title")
+    assert workout_title.size["height"] > 100
+    
+    # Decrease the font size
+    decrease_font_button = driver.find_element_by_id("com.example.fitness:id/decrease_font_button")
+    decrease_font_button.click()
+    
+    # Verify that the font size has decreased
+    assert workout_title.size["height"] == 100
+
+test_accessibility()
+
+driver.quit()
