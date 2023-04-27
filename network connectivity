@@ -1,0 +1,29 @@
+from appium import webdriver
+from time import sleep
+import requests
+
+desired_caps = {
+    "platformName": "Android",
+    "deviceName": "Android Emulator",
+    "appPackage": "com.example.fitness",
+    "appActivity": "MainActivity",
+    "noReset": "true"
+}
+
+driver = webdriver.Remote('http://localhost:4723/wd/hub', desired_caps)
+
+# Network Connectivity Testing
+def test_network_connectivity():
+    # Check network connectivity by pinging a website
+    url = "https://www.google.com"
+    timeout = 5
+    
+    try:
+        response = requests.get(url, timeout=timeout)
+        print("Connected to the internet")
+    except (requests.ConnectionError, requests.Timeout) as exception:
+        print("No internet connection")
+
+test_network_connectivity()
+
+driver.quit()
